@@ -1,0 +1,13 @@
+.post-wrapper {
+    padding: 2em;
+    margin: 1em;
+    width: 40vw;
+}
+
+.post-wrapper input {
+    width: 100%;
+}
+
+.post-wrapper textarea {
+    width: 100%;
+}
