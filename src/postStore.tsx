@@ -31,6 +31,15 @@ export class PostStore extends EventTarget {
             },
         })).json();
     }
+    async create(post: Post) {
+        return await (await fetch(`${this.baseUrl}`, {
+            method: 'POST',
+            body: JSON.stringify(post),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })).json();
+    }
     async loadComments(id: number): Promise<Comment[]> {
         return await (await fetch(`${this.baseUrl}/${id}/comments`)).json();
     }

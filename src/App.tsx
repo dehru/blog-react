@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { PostStore, Post } from './postStore';
 import { PostEl } from './PostEl';
@@ -36,19 +35,27 @@ class App extends React.Component {
   }
 
   changePost(post: Post) {
-    this.postStore.update(post).then(() => {
-      this.loadAll();
-    });
+    console.log('change post', post);
+    if (post.id) {
+      this.postStore.update(post).then(() => {
+        this.loadAll();
+      });
+    } else {
+      this.postStore.create(post).then(() => {
+        this.loadAll();
+      });
+    }
   }
   
   render() {
-    const selected = this.state.selected ? <PostEl post={this.state.selected} onChange={(e: Post) => this.changePost(e)}></PostEl> : <h2>Select a post</h2>;
+    const selected = <PostEl post={this.state.selected} onChange={(e: Post) => this.changePost(e)}></PostEl>;
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>Posts</h1>
+        <header className="app-header">
+          <h1>My Blog</h1>
         </header>
         <nav>
+          <strong>Select a post below:</strong>
           <ul>
             {this.state.posts.map((post: Post) => { return <li key={post.id} onClick={() => { if (post.id) { this.loadOne(post.id); } }}>{post.title}</li> })}
           </ul>

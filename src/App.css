@@ -3,22 +3,32 @@
   grid-template-columns: 20vw auto;
   grid-template-rows: 10vh auto;
 }
-.AppHeader {
-  grid-column: 1 2;
+.app-header {
+  grid-column: 1 / 3;
+  grid-row-start: 1;
 }
 nav {
   grid-row-start: 2;
 }
 nav ul {
   list-style-type: none;
-  margin: 0;
+  margin: .5em 0;
   padding: 0;
 }
 nav ul li {
   text-overflow: ellipsis;
   cursor: pointer;
+  height: 1.5em;
+  line-height: 1.5em;
+  overflow: hidden;
 }
+nav ul li:hover {
+  background: light-grey;
+  text-decoration: underline;
+}
+
 main {
   grid-row-start: 2;
   grid-column-start: 2;
+  padding: 1em;
 }
