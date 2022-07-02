@@ -5,13 +5,16 @@ import { PostEl } from './PostEl';
 
 type AppPostState = {
   posts: Post[],
+  comments?: Comment[],
   selected?: Post
 }
 class App extends React.Component {
 
   postStore: PostStore;
   state: AppPostState = {
-    posts: []
+    posts: [],
+    comments: [],
+    selected: undefined
   };
   constructor(props = {}, state = {}) {
     super(props, state);
@@ -28,27 +31,40 @@ class App extends React.Component {
   }
 
   loadOne(id: number) {
-    this.postStore.loadOne(id).then(selected => {
-      this.setState({ selected });
+    this.postStore.loadOne(id).then(post => {
+      const newState = { selected: post };
+      this.setState(newState);
+    }).then(() => {
+      this.postStore.loadComments(id).then((comments) => {
+        this.setState({ comments });
+    })
     });
-
   }
 
   changePost(post: Post) {
-    console.log('change post', post);
-    if (post.id) {
-      this.postStore.update(post).then(() => {
-        this.loadAll();
-      });
-    } else {
-      this.postStore.create(post).then(() => {
-        this.loadAll();
-      });
+    debugger;
+    this.setState({ selected: { ...this.state.selected, ...post } } );
+  }
+
+  submitPost() {
+    debugger;
+    if (this.state.selected) {
+      if (this.state.selected?.id) {
+        this.postStore.update(this.state.selected).then(() => {
+          this.setState({ selected: undefined });
+          this.loadAll();
+        });
+      } else {
+        this.postStore.create(this.state.selected).then(() => {
+          this.setState({ selected: undefined });
+          this.loadAll();
+        });
+      }
     }
   }
   
   render() {
-    const selected = <PostEl post={this.state.selected} onChange={(e: Post) => this.changePost(e)}></PostEl>;
+    const selected = <PostEl post={this.state.selected} onChange={(e: Post) => this.changePost(e)} onSubmit={(e: Post) => this.submitPost()}></PostEl>;
     return (
       <div className="App">
         <header className="app-header">
